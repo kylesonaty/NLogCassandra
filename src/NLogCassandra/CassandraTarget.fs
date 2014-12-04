@@ -7,7 +7,6 @@ open System.Collections.Generic
 
 type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFamily:string) = 
     inherit TargetWithLayout()
-    let mutable _nodes = nodes
     let cluster = Cluster.Builder().AddContactPoints(nodes).Build()
     let session = cluster.Connect()
     do 
@@ -25,7 +24,5 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
         let boundedStatement = 
             statement.Bind(logEvent.SequenceID, logEvent.TimeStamp, logEvent.Level.ToString(), 
                 logEvent.FormattedMessage, stackTrace, logEvent.LoggerName)
-        printfn "Writing log: %A" logEvent.FormattedMessage
         session.Execute(boundedStatement) |> ignore
-        printfn "Wrote log: %A" logEvent.FormattedMessage
        
