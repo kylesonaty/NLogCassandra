@@ -23,7 +23,8 @@ namespace Testing
             var target = new CassandraTarget(new [] {"server1", "server2"}, "yourkeyspace", 2, "yourcolumnfamily");
             config.AddTarget("cassandra",target);
             var rule = new LoggingRule("*", LogLevel.Debug, target);
-           	LogManager.Configuration = config;
+			config.LoggingRules.Add(rule);
+            LogManager.Configuration = config;
             var logger = LogManager.GetCurrentClassLogger();
             logger.Debug("This is a test of the emergency broadcast system");
         }
