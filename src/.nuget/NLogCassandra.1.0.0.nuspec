@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>NLogCassandra</id>
+        <version>1.0.0</version>
+        <title>NLog Cassandra Target</title>
+        <authors>Kyle Sonaty</authors>
+        <owners>Kyle Sonaty</owners>
+        <projectUrl>https://github.com/kylesonaty/NLogCassandra</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>This package is a NLog target that uses the DataStax C# Cassandra Driver to store logs into Cassandra.</description>
+        <releaseNotes />
+        <copyright>Copyright 2014</copyright>
+        <tags>NLog Cassandra DataStax</tags>
+        <dependencies>
+            <dependency id="NLog" version="3.1.0.0" />
+            <dependency id="CassandraCSharpDriver" version="2.1.5" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\NLogCassandra\bin\Release\NLogCassandra.dll" target="lib\NLogCassandra.dll" />
+    </files>
+</package>
