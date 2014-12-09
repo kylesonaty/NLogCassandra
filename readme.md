@@ -1,6 +1,6 @@
 # NLogCassandra #
 
-NLogCassandra is a NLog target that allows you log your messages to Cassandra using DataStax C# driver.
+NLogCassandra is a NLog target that allows you log your messages to Cassandra using DataStax C# driver. You can get the [nuget package here](https://www.nuget.org/packages/NLogCassandra/).
 
 
 ## How to use ##
@@ -32,6 +32,3 @@ namespace Testing
 }
 ```
 
-## Nuget ##
-
-This is a work in process. For now clone the repository and build and add a reference.  
