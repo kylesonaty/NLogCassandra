@@ -52,8 +52,8 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
         let stackTrace = match logEvent.HasStackTrace with
                             | true -> logEvent.StackTrace.ToString()
                             | _ -> ""
-        let boundedStatement = statement.Value.Bind(logEvent.SequenceID, logEvent.TimeStamp, logEvent.Level.ToString(), 
-                                logEvent.FormattedMessage, stackTrace, logEvent.LoggerName)
+        let boundedStatement = statement.Value.Bind(logEvent.LoggerName, logEvent.SequenceID, logEvent.TimeStamp, logEvent.Level.ToString(), 
+                                logEvent.FormattedMessage, stackTrace)
         session.Value.Execute(boundedStatement) |> ignore
        
     new() as this = new CassandraTarget(Array.empty<string>, "LogSpace", 1, "LogFamily")
