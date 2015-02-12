@@ -16,6 +16,6 @@ module Queries =
             PRIMARY KEY (Logger, Id))
             WITH CLUSTERING ORDER BY (Id ASC);", keyspace, columnFamily)
 
-    let Insert(keyspace, columnFamily) = 
+    let Insert(keyspace, columnFamily, ttl) = 
         String.Format("INSERT INTO \"{0}\".\"{1}\" (Logger, Id, SequenceId, Timestamp, Level, Message, StackTrace)
-        VALUES (?,now(),?,?,?,?,?);", keyspace, columnFamily)
+        VALUES (?,now(),?,?,?,?,?) USING TTL {2};", keyspace, columnFamily, ttl)

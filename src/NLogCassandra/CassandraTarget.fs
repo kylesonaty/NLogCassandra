@@ -8,7 +8,7 @@ open System
 open System.Collections.Generic
 
 [<Target("Cassandra")>]
-type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFamily:string) = 
+type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFamily:string, ?ttl:int) = 
     inherit TargetWithLayout()
 
     let mutable _initialized = false
@@ -16,11 +16,12 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
     let mutable _replication = replication
     let mutable _columnFamily = columnFamily
     let mutable _nodes = nodes
+    let mutable _ttl = defaultArg ttl 0
 
     let rep = dict [ ("class", "SimpleStrategy"); ("replication_factor", _replication.ToString()) ]
     let cluster = new Lazy<Cluster>(fun _ -> Cluster.Builder().WithDefaultKeyspace(_keyspace).AddContactPoints(_nodes).Build())
     let session = new Lazy<ISession>(fun _ -> cluster.Value.ConnectAndCreateDefaultKeyspaceIfNotExists(new Dictionary<string, string>(rep)))
-    let statement = new Lazy<PreparedStatement>(fun _ -> session.Value.Prepare(Queries.Insert(_keyspace, _columnFamily)))
+    let statement = new Lazy<PreparedStatement>(fun _ -> session.Value.Prepare(Queries.Insert(_keyspace, _columnFamily, _ttl)))
 
     let init = fun _ -> 
         let createColumnFamilyStatement = (new SimpleStatement(Queries.CreateTable(_keyspace, _columnFamily))).SetConsistencyLevel(new Nullable<ConsistencyLevel>(ConsistencyLevel.All))
@@ -43,6 +44,8 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
     member this.Replication with get() = _replication and set(value:int) = _replication <- value
     [<AdvancedAttribute>]
     member this.ColumnFamily with get() = _columnFamily and set(value:string) = _columnFamily <- value.Trim()
+    [<AdvancedAttribute>]
+    member this.Ttl with get() = _ttl and set(value:int) = _ttl <- value
 
     override this.Write(logEvent:LogEventInfo) =
         if (not _initialized) then
