@@ -21,6 +21,7 @@ namespace Testing
         {
 	        var config = new LoggingConfiguration();
             var target = new CassandraTarget(new [] {"server1", "server2"}, "yourkeyspace", 2, "yourcolumnfamily");
+            var targetWithTtl = new CassandraTarget(new [] {"server1", "server2"}, "yourkeyspace", 2, "yourcolumnfamily", 600);
             config.AddTarget("cassandra",target);
             var rule = new LoggingRule("*", LogLevel.Debug, target);
 			config.LoggingRules.Add(rule);
