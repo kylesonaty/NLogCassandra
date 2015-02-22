@@ -19,7 +19,11 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
     let mutable _ttl = defaultArg ttl 0
 
     let rep = dict [ ("class", "SimpleStrategy"); ("replication_factor", _replication.ToString()) ]
-    let cluster = new Lazy<Cluster>(fun _ -> Cluster.Builder().WithDefaultKeyspace(_keyspace).AddContactPoints(_nodes).Build())
+    
+    let cluster = new Lazy<Cluster>(fun _ -> 
+        let nds = _nodes |> Array.map(fun n -> n.Trim())
+        Cluster.Builder().WithDefaultKeyspace(_keyspace).AddContactPoints(nds).Build())
+
     let session = new Lazy<ISession>(fun _ -> cluster.Value.ConnectAndCreateDefaultKeyspaceIfNotExists(new Dictionary<string, string>(rep)))
     let statement = new Lazy<PreparedStatement>(fun _ -> session.Value.Prepare(Queries.Insert(_keyspace, _columnFamily, _ttl)))
 
