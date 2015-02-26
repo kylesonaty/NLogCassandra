@@ -56,9 +56,9 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
             init()
 
         let message = this.Layout.Render(logEvent)
-        let stackTrace = match logEvent.HasStackTrace with
-                            | true -> logEvent.StackTrace.ToString()
-                            | _ -> ""
+        let stackTrace = match logEvent.Exception with
+                            | null -> ""
+                            | _ -> logEvent.Exception.StackTrace
         let boundedStatement = statement.Value.Bind(logEvent.LoggerName, logEvent.SequenceID, logEvent.TimeStamp, logEvent.Level.ToString(), 
                                 logEvent.FormattedMessage, stackTrace)
         session.Value.Execute(boundedStatement) |> ignore
