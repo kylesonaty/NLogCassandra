@@ -8,7 +8,7 @@ open System
 open System.Collections.Generic
 
 [<Target("Cassandra")>]
-type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFamily:string, ?ttl:int) = 
+type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFamily:string, ?ttl:int) =
     inherit TargetWithLayout()
 
     let mutable _initialized = false
@@ -19,15 +19,14 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
     let mutable _ttl = defaultArg ttl 0
 
     let rep = dict [ ("class", "SimpleStrategy"); ("replication_factor", _replication.ToString()) ]
-    
-    let cluster = new Lazy<Cluster>(fun _ -> 
-        let nds = _nodes |> Array.map(fun n -> n.Trim())
-        Cluster.Builder().WithDefaultKeyspace(_keyspace).AddContactPoints(nds).Build())
+
+    let cluster = new Lazy<Cluster>(fun _ ->
+        Cluster.Builder().WithDefaultKeyspace(_keyspace).AddContactPoints(_nodes |> Array.map(fun n -> n.Trim())).Build())
 
     let session = new Lazy<ISession>(fun _ -> cluster.Value.ConnectAndCreateDefaultKeyspaceIfNotExists(new Dictionary<string, string>(rep)))
     let statement = new Lazy<PreparedStatement>(fun _ -> session.Value.Prepare(Queries.Insert(_keyspace, _columnFamily, _ttl)))
 
-    let init = fun _ -> 
+    let init = fun _ ->
         let createColumnFamilyStatement = (new SimpleStatement(Queries.CreateTable(_keyspace, _columnFamily))).SetConsistencyLevel(new Nullable<ConsistencyLevel>(ConsistencyLevel.All))
         let createResult = session.Value.Execute(createColumnFamilyStatement)
         cluster.Value.RefreshSchema() |> ignore
@@ -36,10 +35,10 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
     member this.Nodes  with get () = _nodes and set (value) = _nodes <- value
 
     [<RequiredParameterAttribute>]
-    member this.Node 
-        with get() = 
+    member this.Node
+        with get() =
             String.Join(",", this.Nodes)
-        and set(value:string) = 
+        and set(value:string) =
             this.Nodes <- value.Split(',') |> Array.map(fun h -> h.Trim())
 
     [<AdvancedAttribute>]
@@ -59,8 +58,8 @@ type CassandraTarget(nodes:string[], keyspace:string, replication:int, columnFam
         let stackTrace = match logEvent.Exception with
                             | null -> ""
                             | _ -> logEvent.Exception.StackTrace
-        let boundedStatement = statement.Value.Bind(logEvent.LoggerName, logEvent.SequenceID, logEvent.TimeStamp, logEvent.Level.ToString(), 
+        let boundedStatement = statement.Value.Bind(logEvent.LoggerName, logEvent.SequenceID, logEvent.TimeStamp, logEvent.Level.ToString(),
                                 logEvent.FormattedMessage, stackTrace)
         session.Value.Execute(boundedStatement) |> ignore
-       
+
     new() as this = new CassandraTarget(Array.empty<string>, "LogSpace", 1, "LogFamily")

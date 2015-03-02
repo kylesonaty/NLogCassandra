@@ -9,11 +9,12 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NLogCassandra</RootNamespace>
     <AssemblyName>NLogCassandra</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>NLogCassandra</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,19 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Cassandra">
-      <HintPath>..\packages\CassandraCSharpDriver.2.1.5\lib\net40\Cassandra.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cassandra.Data">
-      <HintPath>..\packages\CassandraCSharpDriver.2.1.5\lib\net40\Cassandra.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cassandra.Data.Linq">
-      <HintPath>..\packages\CassandraCSharpDriver.2.1.5\lib\net40\Cassandra.Data.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Crc32C.NET">
-      <HintPath>..\packages\Crc32C.NET.1.0.5.0\lib\net20\Crc32C.NET.dll</HintPath>
+      <HintPath>..\packages\CassandraCSharpDriver.2.5.0\lib\net40\Cassandra.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Core">
@@ -84,10 +73,6 @@
     <Reference Include="mscorlib" />
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Snappy.NET">
-      <HintPath>..\packages\Snappy.NET.1.1.1.8\lib\net45\Snappy.NET.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

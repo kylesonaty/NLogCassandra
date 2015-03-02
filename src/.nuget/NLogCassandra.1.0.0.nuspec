@@ -2,20 +2,20 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>NLogCassandra</id>
-        <version>1.0.6</version>
+        <version>1.0.8</version>
         <title>NLog Cassandra Target</title>
         <authors>Kyle Sonaty</authors>
         <owners>Kyle Sonaty</owners>
         <projectUrl>https://github.com/kylesonaty/NLogCassandra</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>This package is a NLog target that uses the DataStax C# Cassandra Driver to store logs into Cassandra.</description>
-        <releaseNotes>Added FSharp.Core again.</releaseNotes>
-        <copyright>Copyright 2014</copyright>
+        <releaseNotes>Upgrading to .net 4.5.1 and cassandra dependency.</releaseNotes>
+        <copyright>Copyright 2015</copyright>
         <tags>NLog Cassandra DataStax</tags>
         <dependencies>
             <dependency id="NLog" version="3.1.0.0" />
-            <dependency id="CassandraCSharpDriver" version="2.1.5" />
             <dependency id="FSharp.Core" version="3.1.2.1" />
+            <dependency id="CassandraCSharpDriver" version="2.5.0" />
         </dependencies>
     </metadata>
     <files>
